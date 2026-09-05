@@ -14,6 +14,7 @@
   --color-hv-cyan: #3ee7ff;
   --color-hv-teal: #2dd6a9;
   --color-hv-amber: #ffb547;
+  --color-hv-violet: #a585ff;
   --color-hv-ok: #57e88d;
   --color-hv-red: #ff6161;
 }
@@ -55,6 +56,23 @@ body {
   background: radial-gradient(circle at 28% 30%, rgba(62, 231, 255, 0.1), transparent 52%),
     radial-gradient(circle at 76% 72%, rgba(255, 181, 71, 0.06), transparent 48%),
     radial-gradient(circle at 60% 12%, rgba(45, 214, 169, 0.05), transparent 42%);
+}
+
+.hv-glow-hero {
+  background: radial-gradient(circle at 30% 34%, rgba(62, 231, 255, 0.12), transparent 50%),
+    radial-gradient(circle at 72% 64%, rgba(154, 107, 255, 0.11), transparent 52%),
+    radial-gradient(circle at 55% 15%, rgba(45, 214, 169, 0.05), transparent 42%);
+}
+
+.hero-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease 0.05s;
+}
+.hero-canvas.is-live {
+  opacity: 1;
 }
 
 .hv-no-scrollbar {
