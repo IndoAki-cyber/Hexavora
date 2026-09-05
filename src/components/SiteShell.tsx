@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
 import HexaLogo, { Wordmark } from "./boot/HexaLogo";
 
 interface SiteShellProps {
@@ -32,11 +31,8 @@ export default function SiteShell({ revealed }: SiteShellProps) {
   const ss = String(uptime % 60).padStart(2, "0");
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
-      animate={revealed ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
-      transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }}
-      className="relative min-h-screen overflow-hidden bg-void font-mono text-ink"
+    <div
+      className={`site-shell ${revealed ? "is-revealed" : ""} relative min-h-screen overflow-hidden bg-void font-mono text-ink`}
     >
       {/* ambience */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 hv-glow" />
@@ -126,6 +122,6 @@ export default function SiteShell({ revealed }: SiteShellProps) {
           </span>
         </div>
       </footer>
-    </motion.div>
+    </div>
   );
 }

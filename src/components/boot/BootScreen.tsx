@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
 import HexaLogo, { Wordmark } from "./HexaLogo";
 import ParticleField from "./ParticleField";
 import BootLog from "./BootLog";
@@ -21,8 +20,6 @@ interface BootScreenProps {
   /** fired when the overlay can be unmounted */
   onDone: () => void;
 }
-
-const SHUTTER_EASE = [0.76, 0, 0.24, 1] as const;
 
 export default function BootScreen({ onReveal, onDone }: BootScreenProps) {
   const reduced = usePrefersReducedMotion();
@@ -173,50 +170,37 @@ export default function BootScreen({ onReveal, onDone }: BootScreenProps) {
           : "INITIALIZING CORE";
 
   return (
-    <motion.div
+    <div
       role="status"
       aria-label="HexaVora system boot sequence"
-      className={`fixed inset-0 z-50 overflow-hidden font-mono text-ink ${reduced ? "bg-void" : ""}`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: exiting && reduced ? 0 : 1 }}
-      transition={{ duration: exiting && reduced ? 0.3 : 0.5 }}
+      className={`boot-root fixed inset-0 z-50 overflow-hidden font-mono text-ink ${
+        reduced ? "bg-void" : ""
+      } ${exiting ? "boot-exit" : ""} ${exiting && reduced ? "boot-root-exit" : ""}`}
     >
       {/* ---- shutter panels (slide away on exit) ---- */}
       {!reduced && (
         <>
-          <motion.div
+          <div
             aria-hidden="true"
-            className="absolute inset-x-0 top-0 z-0 h-[51%] bg-gradient-to-b from-abyss to-void"
-            animate={{ y: exiting ? "-103%" : "0%" }}
-            transition={{ duration: 0.62, ease: SHUTTER_EASE, delay: 0.14 }}
+            className="boot-shutter boot-shutter-top absolute inset-x-0 top-0 z-0 h-[51%] bg-gradient-to-b from-abyss to-void"
           />
-          <motion.div
+          <div
             aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 z-0 h-[51%] bg-gradient-to-b from-void to-abyss"
-            animate={{ y: exiting ? "103%" : "0%" }}
-            transition={{ duration: 0.62, ease: SHUTTER_EASE, delay: 0.14 }}
+            className="boot-shutter boot-shutter-bottom absolute inset-x-0 bottom-0 z-0 h-[51%] bg-gradient-to-b from-void to-abyss"
           />
         </>
       )}
 
       {/* light seam that splits the shutters */}
       {exiting && !reduced && (
-        <motion.div
+        <div
           aria-hidden="true"
-          className="absolute inset-x-0 top-1/2 z-30 h-[2px] -translate-y-1/2 bg-hv-cyan shadow-[0_0_24px_rgba(62,231,255,0.9)]"
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: [0, 1, 0] }}
-          transition={{ duration: 0.55, times: [0, 0.3, 1], ease: "easeOut" }}
+          className="boot-seam absolute inset-x-0 top-1/2 z-30 h-[2px] bg-hv-cyan shadow-[0_0_24px_rgba(62,231,255,0.9)]"
         />
       )}
 
       {/* ---- content + ambience (fades fast on exit) ---- */}
-      <motion.div
-        className="absolute inset-0 z-10 flex flex-col"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: exiting ? 0 : 1 }}
-        transition={{ duration: exiting ? 0.16 : 0.5 }}
-      >
+      <div className="boot-content absolute inset-0 z-10 flex flex-col">
         {/* ambience layers */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 hv-glow" />
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 hv-grid" />
@@ -324,12 +308,7 @@ export default function BootScreen({ onReveal, onDone }: BootScreenProps) {
 
         {/* ACCESS GRANTED stamp */}
         {granted && (
-          <motion.div
-            initial={{ opacity: 0, scale: 1.12 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.28, ease: "easeOut" }}
-            className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
-          >
+          <div className="stamp-in pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
             <div className="-rotate-3 border-2 border-hv-ok/70 bg-void/80 px-7 py-3.5 shadow-[0_0_44px_rgba(87,232,141,0.28)]">
               <div className="font-display text-lg font-bold tracking-[0.34em] text-hv-ok sm:text-2xl">
                 ACCESS GRANTED
@@ -338,7 +317,7 @@ export default function BootScreen({ onReveal, onDone }: BootScreenProps) {
                 ALL SYSTEMS NOMINAL
               </div>
             </div>
-          </motion.div>
+          </div>
         )}
 
         {/* bottom frame line */}
@@ -346,7 +325,7 @@ export default function BootScreen({ onReveal, onDone }: BootScreenProps) {
           <span>HEXAVORA © 2087</span>
           <span className="hidden sm:inline">BOOT CHANNEL 06 · ENCRYPTED</span>
         </footer>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }
