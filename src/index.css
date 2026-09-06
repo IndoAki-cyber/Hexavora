@@ -1,1 +1,318 @@
 @import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", "Avenir Next", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-hud: "Michroma", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+
+  --color-void: #04070d;
+  --color-abyss: #070d17;
+  --color-panel: #0a1322;
+  --color-line: #16283f;
+  --color-ink: #dfe9f5;
+  --color-dim: #6f87a6;
+
+  --color-hv-cyan: #3ee7ff;
+  --color-hv-teal: #2dd6a9;
+  --color-hv-amber: #ffb547;
+  --color-hv-ok: #57e88d;
+  --color-hv-red: #ff6161;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: #04070d !important;
+  color: #dfe9f5 !important;
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(62, 231, 255, 0.28);
+  color: #eaf6ff;
+}
+
+/* ---------- ambient layers ---------- */
+
+.hv-grid {
+  background-image: linear-gradient(rgba(62, 231, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(62, 231, 255, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 85% at 50% 45%, black 28%, transparent 76%);
+  mask-image: radial-gradient(ellipse 90% 85% at 50% 45%, black 28%, transparent 76%);
+}
+
+.hv-vignette {
+  background: radial-gradient(ellipse 120% 95% at 50% 42%, transparent 42%, rgba(2, 4, 8, 0.88) 100%);
+}
+
+.hv-glow {
+  background: radial-gradient(circle at 28% 30%, rgba(62, 231, 255, 0.1), transparent 52%),
+    radial-gradient(circle at 76% 72%, rgba(255, 181, 71, 0.06), transparent 48%),
+    radial-gradient(circle at 60% 12%, rgba(45, 214, 169, 0.05), transparent 42%);
+}
+
+.hv-no-scrollbar {
+  scrollbar-width: none;
+}
+.hv-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hv-ticks {
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 10px,
+    rgba(4, 7, 13, 0.9) 10px,
+    rgba(4, 7, 13, 0.9) 12px
+  );
+}
+
+/* ---------- keyframes ---------- */
+
+@keyframes hv-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes hv-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes hv-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes hv-line-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hv-flicker {
+  0%,
+  84%,
+  90%,
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  86% {
+    opacity: 0.3;
+    transform: translateX(1.5px);
+  }
+  88% {
+    opacity: 0.85;
+    transform: translateX(-1px);
+  }
+}
+
+@keyframes hv-scan {
+  0% {
+    top: -14%;
+  }
+  100% {
+    top: 112%;
+  }
+}
+
+@keyframes hv-rot {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hv-sheen {
+  0% {
+    transform: translateX(-160%) skewX(-18deg);
+  }
+  55%,
+  100% {
+    transform: translateX(360%) skewX(-18deg);
+  }
+}
+
+@keyframes hv-boot-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hv-boot-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes hv-stamp {
+  from {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---------- animation utilities ---------- */
+
+.anim-blink {
+  animation: hv-blink 1.05s linear infinite;
+}
+
+.anim-pulse-soft {
+  animation: hv-pulse 2.2s ease-in-out infinite;
+}
+
+.anim-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: hv-draw 1s cubic-bezier(0.65, 0, 0.25, 1) forwards;
+}
+
+.anim-flicker {
+  animation: hv-flicker 6s linear infinite;
+}
+
+.anim-rot {
+  animation: hv-rot 26s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+.anim-scan {
+  animation: hv-scan 6.5s linear infinite;
+}
+
+.anim-sheen {
+  animation: hv-sheen 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.log-line {
+  animation: hv-line-in 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* ---------- boot choreography ---------- */
+
+.boot-root {
+  opacity: 0;
+  animation: hv-boot-in 0.5s ease-out forwards;
+}
+
+/* reduced-motion path: simple crossfade out */
+.boot-root-exit {
+  animation: hv-boot-out 0.3s ease-out forwards;
+}
+
+.boot-shutter {
+  transition: transform 0.62s cubic-bezier(0.76, 0, 0.24, 1) 0.14s;
+  will-change: transform;
+}
+
+.boot-exit .boot-shutter-top {
+  transform: translateY(-103%);
+}
+
+.boot-exit .boot-shutter-bottom {
+  transform: translateY(103%);
+}
+
+/* glowing edge that rides each shutter as it opens */
+.boot-shutter-edge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  opacity: 0;
+  background: #3ee7ff;
+  box-shadow: 0 0 18px rgba(62, 231, 255, 0.9), 0 0 42px rgba(62, 231, 255, 0.45);
+  transform: scaleX(0.25);
+  transition:
+    opacity 0.18s ease-out 0.05s,
+    transform 0.62s cubic-bezier(0.76, 0, 0.24, 1) 0.14s;
+}
+
+.boot-shutter-top .boot-shutter-edge {
+  bottom: -1px;
+}
+
+.boot-shutter-bottom .boot-shutter-edge {
+  top: -1px;
+}
+
+.boot-exit .boot-shutter-edge {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.boot-content {
+  transition: opacity 0.16s ease-out;
+}
+
+.boot-exit .boot-content {
+  opacity: 0;
+}
+
+.stamp-in {
+  animation: hv-stamp 0.28s ease-out both;
+}
+
+/* ---------- brand image slot ---------- */
+
+.brand-slot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(62, 231, 255, 0.3);
+  background:
+    linear-gradient(160deg, rgba(62, 231, 255, 0.09), rgba(10, 19, 34, 0.6) 55%),
+    #0a1322;
+  box-shadow:
+    0 0 0 1px rgba(4, 7, 13, 0.9),
+    0 0 26px rgba(62, 231, 255, 0.12),
+    inset 0 0 22px rgba(62, 231, 255, 0.06);
+}
+
+/* ---------- accessibility ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
