@@ -72,9 +72,9 @@ export default function BootScreen({ onReveal, onDone }: BootScreenProps) {
           }, line.at)
         );
       });
-      tids.push(window.setTimeout(() => setPhaseBoth("granted"), BOOT_END_MS + 340));
-      tids.push(window.setTimeout(startExit, BOOT_END_MS + 1350));
-      tids.push(window.setTimeout(() => setShowSkip(true), 700));
+      tids.push(window.setTimeout(() => setPhaseBoth("granted"), BOOT_END_MS + 380));
+      tids.push(window.setTimeout(startExit, BOOT_END_MS + 1500));
+      tids.push(window.setTimeout(() => setShowSkip(true), 850));
     }
     timeouts.current = tids;
     return () => tids.forEach((t) => window.clearTimeout(t));
