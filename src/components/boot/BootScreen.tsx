@@ -251,7 +251,7 @@ export default function BootScreen({ onReveal, onDone }: BootScreenProps) {
                     )}
                   </div>
                 </div>
-                <div className="font-hud text-4xl font-normal leading-none tracking-[0.08em] text-ink sm:text-5xl">
+                <div className="font-hud text-3xl font-normal leading-none tracking-[0.08em] text-ink sm:text-4xl">
                   <span ref={pctEl} className="tabular-nums">
                     000
                   </span>
